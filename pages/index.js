@@ -2,7 +2,8 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import { useEffect, useState } from "react";
 import Button from '@mui/material/Button';
-import PhotoCredit from "../components/PhotoCredit"
+import PhotoCredit from "../components/PhotoCredit";
+import { motion, AnimatePresence } from "framer-motion"
 
 // General data-fetching function
 const fetcher = url => fetch(url).then(r => r.json());
@@ -18,6 +19,7 @@ export default function Home() {
   const [ requestActivity, setRequestActivity ] = useState(true);
   const [ requestWallpaper, setRequestWallpaper ] = useState(true);
   const [ showActivity, setShowActivity ] = useState(false);
+  const [ showConfig, setShowConfig ] = useState(false);
   
   const refreshData = () => setRefresh(!refresh);
   
@@ -59,10 +61,10 @@ export default function Home() {
       backgroundImage: wallpaper == null ? null : `url(${wallpaper.urls.regular})`
     }}>
       <Head>
-        <title>Create Next App</title>
+        <title>Idk What To Do</title>
         <meta name="description" content="TODO" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
@@ -71,25 +73,40 @@ export default function Home() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </Head>
       <MainWrapper>
-        <Main>
-          {shouldShowActivity ? <Headline>
-            {activity.activity}
-          </Headline> : <Headline>
-            Bored? Let's find you something to do.
+        <ActivityWrapper as={motion.main} animate={{
+          height: "auto",
+          paddingTop: showConfig ? "20px" : "50px",
+          paddingBottom: showConfig ? "20px" : "50px"
+        }}>
+          <Activity>
+            {shouldShowActivity ? <Headline>
+              {activity.activity}
+            </Headline> : <Headline>
+              Bored? Let's find you something to do.
             </Headline>}
-          <MainButtonList>
-            {!showActivity && <MainButton onClick={() => {
-              setShowActivity(!showActivity);
-            }}>Help I'm Bored</MainButton>}
-            {showActivity && <MainButton onClick={() => {
-              setRequestActivity(true);
-              refreshData();
-            }}>Give Me Another</MainButton>}
-            <MainButton>Be More Specific</MainButton>
-          </MainButtonList>
-        </Main>
+            <ActivityButtonList>
+              {!showActivity && <ActivityButton onClick={() => {
+                setShowActivity(!showActivity);
+              }}>Help I'm Bored</ActivityButton>}
+              {showActivity && <ActivityButton onClick={() => {
+                setRequestActivity(true);
+                refreshData();
+              }}>Give Me Another</ActivityButton>}
+              <ActivityButton onClick={() => {
+                setShowConfig(!showConfig);
+              }}>Be More Specific</ActivityButton>
+            </ActivityButtonList>
+          </Activity>
+        </ActivityWrapper>
+        
+        <ConfigWindow isVisible={showConfig}>
+          hiiiiiiii
+        </ConfigWindow>
       </MainWrapper>
       <Footer>
         <PhotoCredit data={wallpaper} onRefresh={() => {
@@ -112,27 +129,42 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-const MainWrapper = styled.div`
+const MainWrapper = styled.main``;
+
+const ActivityWrapper = styled.section`
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
+  position: relative;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
   padding: 50px;
+  height: auto;
+  width: 800px;
+  
+  @media (max-width: 800px) {
+    width: 500px;
+  }
+  
+  @media (max-width: 500px) {
+    width: 300px;
+  }
 `;
-const Main = styled.main`
+
+const Activity = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
   height: 100%;
-  width: 800px;
+  width: 100%;
 `;
 
 const Headline = styled.h1`
   min-height: 75px;
 `;
 
-const MainButtonList = styled.ul`
+const ActivityButtonList = styled.ul`
   list-style-type: none;
   padding: 0;
   display: flex;
@@ -143,13 +175,55 @@ const MainButtonList = styled.ul`
     margin-left: auto;
     margin-right: auto;
     width: 200px;
+    text-transform: none;
+    font-family: 'Wix Madefor Display', sans-serif;
   }
 `;
-function MainButton({children, onClick}) {
+
+function ActivityButton({children, onClick}) {
   return (
     <li><Button variant="contained" size="large" onClick={onClick}>{children}</Button></li>
   );
 }
+
+const ConfigWindow = ({ isVisible }) => (
+  <AnimatePresence>
+    {isVisible && (
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 100, opacity: 0 }}
+      >
+        <ConfigWrapper>
+          Hello there!
+        </ConfigWrapper>
+      </motion.div>
+    )}
+  </AnimatePresence>
+)
+
+const ConfigWrapper = styled.section`
+  min-height: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 50px 50px;
+  height: auto;
+  width: 800px;
+  
+  @media (max-width: 800px) {
+    width: 500px;
+  }
+  
+  @media (max-width: 500px) {
+    width: 300px;
+  }
+`;
+
+const Config = styled.div`
+  width: 100%;
+`;
 
 const Footer = styled.footer`
   position: absolute;

@@ -7,12 +7,25 @@ const GlobalStyle = createGlobalStyle`
   
   html,
   body {
-    color: ${({ theme }) => theme.palette.primary.main};
-    background-color: ${({ theme }) => theme.palette.secondary.main};
+    color: #fafafa;
+    background-color: #111111;
     padding: 0;
     margin: 0;
-    font-family: Roboto;
+    font-family: 'Wix Madefor Display', sans-serif;
+    
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
   }
+  
+  @keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+     }
+}
   
   * {
     box-sizing: border-box;

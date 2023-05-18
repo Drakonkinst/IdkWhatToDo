@@ -3,16 +3,7 @@ import { ThemeProvider } from 'styled-components'
 import { createTheme } from '@mui/material/styles';
 import GlobalStyle from '../components/globalstyles'
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#fafafa'
-    },
-    secondary: {
-      main: '#111'
-    }
-  }
-});
+const theme = createTheme({});
 console.log(theme);
 
 export default function App({ Component, pageProps }) {
