@@ -3,15 +3,19 @@ import { createGlobalStyle } from 'styled-components'
 const GlobalStyle = createGlobalStyle`
   :root {
     --transition-duration: 200ms;
+    --font-family: 'Wix Madefor Display', sans-serif;
+    --text-color: #fafafa;
+    --text-color-light: var(--text-color-light);
+    --text-color-dark: #bbbbbb;
   }
   
   html,
   body {
-    color: #fafafa;
+    color: var(--text-color);
     background-color: #111111;
     padding: 0;
     margin: 0;
-    font-family: 'Wix Madefor Display', sans-serif;
+    font-family: var(--font-family);
     
     animation: fadeInAnimation ease 1s;
     animation-iteration-count: 1;

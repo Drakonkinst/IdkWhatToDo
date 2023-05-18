@@ -25,13 +25,13 @@ const PhotoCreditWrapper = styled.section`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  color: #bbbbbb;
+  color: var(--text-color-dark);
   transition: color var(--transition-duration) ease;
   
   &.active {
     background-color: rgba(0, 0, 0, 0.75);
     border-radius: 10px;
-    color: #fafafa;
+    color: var(--text-color);
   }
   
   p {
@@ -47,14 +47,14 @@ const PhotoCreditWrapper = styled.section`
   }
   
   p a {
-    color: #bbbbbb;
+    color: var(--text-color-dark);
     transition: color var(--transition-duration) ease;
   }
 
   p a:hover {
     text-decoration: underline;
     cursor: pointer;
-    color: #fafafa;
+    color: var(--text-color);
   }
   
   div.refresh-button {
@@ -62,7 +62,7 @@ const PhotoCreditWrapper = styled.section`
     position: absolute;
     top: 5px;
     right: 15px;
-    color: #bbbbbb;
+    color: var(--text-color-dark);
     width: fit-content;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -75,19 +75,19 @@ const PhotoCreditWrapper = styled.section`
   }
   
   div.refresh-button:hover {
-    color: #fafafa;
+    color: var(--text-color);
   }
 `;
 
 const PhotoCreditButton = styled.div`
   margin-top: auto;
   user-select: none;
-  color: #eeeeee;
+  color: var(--text-color-light);
   transition: color var(--transition-duration) ease;
   
   &:hover {
     cursor: pointer;
-    color: #fafafa;
+    color: var(--text-color);
   }
 `;
 
