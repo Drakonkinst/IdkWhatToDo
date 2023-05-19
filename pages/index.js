@@ -106,7 +106,7 @@ export default function Home() {
     }}>
       <Head>
         <title>Idk What To Do</title>
-        <meta name="description" content="TODO" />
+        <meta name="description" content="A website to inspire you when you're bored" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="icon" href="/favicon.png" />
         <link
