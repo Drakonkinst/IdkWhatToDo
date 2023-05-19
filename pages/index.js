@@ -63,7 +63,7 @@ export default function Home() {
 
   // Fetch data based on whatever is requested
   useEffect(() => {
-    const BORED_URL = `http://www.boredapi.com/api/activity?minaccessibility=${accessibility[0]}&maxaccessibility=${accessibility[1]}` + (participants < 6 ? `&participants=${participants}` : "") + (freeOnly ? "&price=0.0" : "") + (type != null ? `&type=${type}` : "");
+    const BORED_URL = `https://www.boredapi.com/api/activity?minaccessibility=${accessibility[0]}&maxaccessibility=${accessibility[1]}` + (participants < 6 ? `&participants=${participants}` : "") + (freeOnly ? "&price=0.0" : "") + (type != null ? `&type=${type}` : "");
     setLoading(true);
     if(requestActivity) {
       setRequestActivity(false);
