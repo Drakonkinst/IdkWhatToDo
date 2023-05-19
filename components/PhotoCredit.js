@@ -4,9 +4,9 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { motion, AnimatePresence } from "framer-motion"
 
-export default function PhotoCredit({data, onRefresh}) {
-    const [ showPhotoInfo, setShowPhotoInfo ] = useState(false);
-    
+export default function PhotoCredit({ data, onRefresh }) {
+    const [showPhotoInfo, setShowPhotoInfo] = useState(false);
+
     return <PhotoCreditWrapper className={showPhotoInfo ? "active" : ""}>
         <PhotoInfoWrapper isVisible={showPhotoInfo} data={data} onRefresh={onRefresh}></PhotoInfoWrapper>
         <PhotoCreditButton onClick={() => {
@@ -100,7 +100,7 @@ const PhotoInfoWrapper = ({ isVisible, data, onRefresh }) => (
     <AnimatePresence>
         {isVisible && (
             <motion.div
-                initial={{ opacity: 0, minWidth: "250px", minHeight: "150px"}}
+                initial={{ opacity: 0, minWidth: "250px", minHeight: "150px" }}
                 animate={{ opacity: 1, minWidth: "250px", minHeight: "150px" }}
                 exit={{ opacity: 0, minWidth: "250px", minHeight: "150px" }}
             >
@@ -108,7 +108,8 @@ const PhotoInfoWrapper = ({ isVisible, data, onRefresh }) => (
             </motion.div>
         )}
     </AnimatePresence>
-)
+);
+
 function PhotoInfo({ data, onRefresh }) {
     const imageName = data?.location?.name ?? "Unknown";
     const userName = data?.user?.name ?? "Unknown";

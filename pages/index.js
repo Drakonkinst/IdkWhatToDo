@@ -16,8 +16,8 @@ export default function Home() {
   const [showActivity, setShowActivity] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
 
-  // https://stackoverflow.com/questions/69000300
   // Variables used to request API data
+  // https://stackoverflow.com/questions/69000300
   const [refresh, setRefresh] = useState(false);
   const [requestActivity, setRequestActivity] = useState(true);
   const [requestWallpaper, setRequestWallpaper] = useState(true);
@@ -35,8 +35,8 @@ export default function Home() {
     setFreeOnly(freeOnly);
   }
 
-  // https://articles.wesionary.team/using-localstorage-with-next-js-a-beginners-guide-7fc4f8bfd9dc
   // Load local storage
+  // https://articles.wesionary.team/using-localstorage-with-next-js-a-beginners-guide-7fc4f8bfd9dc
   useEffect(() => {
     if(typeof window !== 'undefined' && window.localStorage) {
       let filterData = JSON.parse(localStorage.getItem("filterData"));
@@ -49,7 +49,7 @@ export default function Home() {
       }
     }
   }, []);
-  
+
   // Listen to state changes to activity settings
   useEffect(() => {
     setRequestActivity(true);
@@ -231,9 +231,7 @@ const ActivityButtonList = styled.ul`
     li button {
       width: 200px;
     }
-  }
-  
-`;
+  }`;
 
 function ActivityButton({ children, onClick }) {
   return (
@@ -248,10 +246,11 @@ const ConfigWindow = function ({ isVisible, accessibility, participants, type, f
     }
     onChangeSettings(accessibility, participants, newType, freeOnly);
   }
-  
-  // https://stackoverflow.com/questions/72238021/how-to-apply-media-query-in-nextjs
+
+  // Use Material UI's built-in hook
+  // https://stackoverflow.com/questions/72238021
   const matches = useMediaQuery("(max-width: 500px)");
-  
+
   return (
     <AnimatePresence>
       {isVisible && (

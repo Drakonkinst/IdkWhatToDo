@@ -6,6 +6,6 @@ export default async function getRandomWallpaper(req, res) {
         res.status(200).json(data);
     } else {
         console.log("ERROR", response.status, response.statusText);
-        res.status(response.status).json({error: true});
+        res.status(response.status).json({ error: true });
     }
 }
