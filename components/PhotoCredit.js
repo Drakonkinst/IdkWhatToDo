@@ -111,13 +111,14 @@ const PhotoInfoWrapper = ({ isVisible, data, onRefresh }) => (
 );
 
 function PhotoInfo({ data, onRefresh }) {
+    const UTM_REFERRAL_SUFFIX = "?utm_source=idkwhattodo&utm_medium=referral"
     const imageName = data?.location?.name ?? "Unknown";
     const userName = data?.user?.name ?? "Unknown";
-    const imageURL = data?.links?.html ?? "https://unsplash.com/";
+    const imageURL = data?.links?.html ?? "https://unsplash.com";
     const userURL = data?.user?.links?.html;
     return <div>
         <h2>{imageName}</h2>
-        <p>Photo by {userURL ? <a href={userURL} target="_blank">{userName}</a> : <span>{userName}</span>} on <a href={imageURL} target="_blank"> Unsplash</a></p>
+        <p>Photo by {userURL ? <a href={userURL + UTM_REFERRAL_SUFFIX} target="_blank">{userName}</a> : <span>{userName}</span>} on <a href={imageURL + UTM_REFERRAL_SUFFIX} target="_blank"> Unsplash</a></p>
         <div className="refresh-button" onClick={onRefresh}><RefreshIcon fontSize="large" /></div>
     </div>
 }
