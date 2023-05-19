@@ -119,7 +119,6 @@ export default function Home() {
       </Head>
       <MainWrapper>
         <ActivityWrapper as={motion.section} animate={{
-          height: "auto",
           paddingTop: showConfig ? "15px" : "50px",
           paddingBottom: showConfig ? "15px" : "50px"
         }}>
@@ -180,8 +179,7 @@ const ActivityWrapper = styled.section`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
-  padding: 50px 40px;
-  height: auto;
+  padding: 50px 40px 50px 40px;
   width: 800px;
   
   @media (max-width: 800px) {
