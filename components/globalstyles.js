@@ -5,14 +5,16 @@ const GlobalStyle = createGlobalStyle`
     --transition-duration: 200ms;
     --font-family: 'Wix Madefor Display', sans-serif;
     --text-color: #fafafa;
-    --text-color-light: var(--text-color-light);
+    --text-color-light: #eeeeee;
     --text-color-dark: #bbbbbb;
+    --background-color: #111111;
+    --page-margin: 50px;
   }
   
   html,
   body {
     color: var(--text-color);
-    background-color: #111111;
+    background-color: var(--background-color);
     padding: 0;
     margin: 0;
     font-family: var(--font-family);
@@ -24,12 +26,12 @@ const GlobalStyle = createGlobalStyle`
   
   @keyframes fadeInAnimation {
     0% {
-        opacity: 0;
+      opacity: 0;
     }
     100% {
-        opacity: 1;
-     }
-}
+      opacity: 1;
+    }
+  }
   
   * {
     box-sizing: border-box;
@@ -46,10 +48,6 @@ const GlobalStyle = createGlobalStyle`
   a {
     color: inherit;
     text-decoration: none;
-  }
-
-  * {
-    box-sizing: border-box;
   }
 `
 

@@ -19,10 +19,9 @@ export default function PhotoCredit({data, onRefresh}) {
 }
 
 const PhotoCreditWrapper = styled.section`
-  min-width: 350px;
-  min-height: 150px;
   max-width: 600px;
   padding: 10px;
+  margin-right: 5px;
   display: flex;
   flex-direction: column;
   color: var(--text-color-dark);
@@ -42,7 +41,7 @@ const PhotoCreditWrapper = styled.section`
   h2 {
     font-size: 1.1em;
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
     margin-right: 50px;
   }
   
@@ -77,6 +76,12 @@ const PhotoCreditWrapper = styled.section`
   div.refresh-button:hover {
     color: var(--text-color);
   }
+  
+  @media (max-width: 500px) {
+    &.active {
+        border-radius: 5px;
+    }
+  }
 `;
 
 const PhotoCreditButton = styled.div`
@@ -95,9 +100,9 @@ const PhotoInfoWrapper = ({ isVisible, data, onRefresh }) => (
     <AnimatePresence>
         {isVisible && (
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, minWidth: "250px", minHeight: "150px"}}
+                animate={{ opacity: 1, minWidth: "250px", minHeight: "150px" }}
+                exit={{ opacity: 0, minWidth: "250px", minHeight: "150px" }}
             >
                 <PhotoInfo data={data} onRefresh={onRefresh} />
             </motion.div>

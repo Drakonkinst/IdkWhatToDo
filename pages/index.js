@@ -5,23 +5,24 @@ import Button from '@mui/material/Button';
 import PhotoCredit from "../components/PhotoCredit";
 import { motion, AnimatePresence } from "framer-motion"
 import { blue } from '@mui/material/colors';
-import { Box, Slider, Checkbox, FormGroup, Select } from '@mui/material';
-
-// General data-fetching function
-const fetcher = url => fetch(url).then(r => r.json());
+import { Box, Slider, Checkbox, FormGroup } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function Home() {
+  // Website state
   const [activity, setActivity] = useState(null);
   const [wallpaper, setWallpaper] = useState(null);
   const [isLoading, setLoading] = useState(false);
-
-  // https://stackoverflow.com/questions/69000300
-  const [refresh, setRefresh] = useState(false);
-  const [requestActivity, setRequestActivity] = useState(true);
-  const [requestWallpaper, setRequestWallpaper] = useState(true);
   const [showActivity, setShowActivity] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
 
+  // https://stackoverflow.com/questions/69000300
+  // Variables used to request API data
+  const [refresh, setRefresh] = useState(false);
+  const [requestActivity, setRequestActivity] = useState(true);
+  const [requestWallpaper, setRequestWallpaper] = useState(true);
+
+  // Activity filters
   const [accessibility, setAccessibility] = useState([0.0, 1.0]);
   const [participants, setParticipants] = useState(6);
   const [type, setType] = useState(null);
@@ -34,15 +35,33 @@ export default function Home() {
     setFreeOnly(freeOnly);
   }
 
+  // https://articles.wesionary.team/using-localstorage-with-next-js-a-beginners-guide-7fc4f8bfd9dc
+  // Load local storage
+  useEffect(() => {
+    if(typeof window !== 'undefined' && window.localStorage) {
+      let filterData = JSON.parse(localStorage.getItem("filterData"));
+      if(filterData != null) {
+        setAccessibility(filterData.accessibility);
+        setParticipants(filterData.participants);
+        setType(filterData.type);
+        setFreeOnly(filterData.freeOnly);
+        console.log("Local storage loaded!");
+      }
+    }
+  }, []);
+  
   // Listen to state changes to activity settings
   useEffect(() => {
     setRequestActivity(true);
     refreshData();
+    localStorage.setItem("filterData", JSON.stringify({
+      accessibility, participants, type, freeOnly
+    }));
   }, [accessibility, participants, type, freeOnly])
 
   const refreshData = () => setRefresh(!refresh);
 
-  // This is double calling due to https://stackoverflow.com/questions/61254372/my-react-component-is-rendering-twice-because-of-strict-mode/61897567#61897567
+  // Fetch data based on whatever is requested
   useEffect(() => {
     const BORED_URL = `http://www.boredapi.com/api/activity?minaccessibility=${accessibility[0]}&maxaccessibility=${accessibility[1]}` + (participants < 6 ? `&participants=${participants}` : "") + (freeOnly ? "&price=0.0" : "") + (type != null ? `&type=${type}` : "");
     setLoading(true);
@@ -67,8 +86,6 @@ export default function Home() {
         .then((res) => res.json())
         .then((data) => {
           if(!data.error) {
-            console.log(data);
-            console.log("WALLPAPER", data.urls.regular)
             setWallpaper(data);
           }
         })
@@ -76,6 +93,7 @@ export default function Home() {
     setLoading(false);
   }, [refresh])
 
+  // Basic loading screen
   if(isLoading) {
     return <p>Loading...</p>
   }
@@ -93,10 +111,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.png" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-        <link
-          rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -104,10 +118,10 @@ export default function Home() {
         <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </Head>
       <MainWrapper>
-        <ActivityWrapper as={motion.main} animate={{
+        <ActivityWrapper as={motion.section} animate={{
           height: "auto",
-          paddingTop: showConfig ? "15px" : "45px",
-          paddingBottom: showConfig ? "15px" : "45px"
+          paddingTop: showConfig ? "15px" : "50px",
+          paddingBottom: showConfig ? "15px" : "50px"
         }}>
           <Activity>
             {shouldShowActivity ? <Headline>
@@ -118,7 +132,7 @@ export default function Home() {
             <ActivityButtonList>
               {!showActivity && <ActivityButton onClick={() => {
                 setShowActivity(!showActivity);
-              }}>Help I'm Bored</ActivityButton>}
+              }}>Find Something To Do</ActivityButton>}
               {showActivity && <ActivityButton onClick={() => {
                 setRequestActivity(true);
                 refreshData();
@@ -144,7 +158,7 @@ export default function Home() {
 }
 
 const Wrapper = styled.div`
-  min-height: 100%;
+  height: 100%;
   overflow-y: scroll;
   background-position: center;
   background-repeat: no-repeat;
@@ -155,8 +169,8 @@ const Wrapper = styled.div`
 `;
 
 const MainWrapper = styled.main`
-  padding-top: 20px;
-  padding-bottom: 20px;
+  height: 100%;
+  padding-top: var(--page-margin);
 `;
 
 const ActivityWrapper = styled.section`
@@ -165,8 +179,8 @@ const ActivityWrapper = styled.section`
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 20px;
-  padding: 40px;
+  margin-bottom: 10px;
+  padding: 50px 40px;
   height: auto;
   width: 800px;
   
@@ -179,7 +193,7 @@ const ActivityWrapper = styled.section`
   }
 `;
 
-const Activity = styled.div`
+const Activity = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -197,15 +211,28 @@ const ActivityButtonList = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   
   li button {
     margin-left: auto;
     margin-right: auto;
-    width: 200px;
+    width: 250px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-transform: none;
     font-family: var(--font-family);
   }
+  
+  @media (max-width: 800px) {
+    gap: 10px;
+  }
+  
+  @media (max-width: 500px) {
+    li button {
+      width: 200px;
+    }
+  }
+  
 `;
 
 function ActivityButton({ children, onClick }) {
@@ -222,20 +249,27 @@ const ConfigWindow = function ({ isVisible, accessibility, participants, type, f
     onChangeSettings(accessibility, participants, newType, freeOnly);
   }
   
+  // https://stackoverflow.com/questions/72238021/how-to-apply-media-query-in-nextjs
+  const matches = useMediaQuery("(max-width: 500px)");
+  
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <motion.section
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
+          transition={{ type: "spring", bounce: 0.1 }}
+          style={{
+            paddingBottom: "var(--page-margin)"
+          }}
         >
           <ConfigWrapper>
             <h2>Be More Specific</h2>
             <FormGroup>
-              <Box>
+              <Box className="free-only-box">
                 <label htmlFor="freeOnly">Free activities only?</label>
-                <Checkbox id="freeOnly" defaultChecked sx={{
+                <Checkbox id="freeOnly" sx={{
                   color: blue[800],
                   '&.Mui-checked': {
                     color: blue[600],
@@ -251,7 +285,7 @@ const ConfigWindow = function ({ isVisible, accessibility, participants, type, f
                   <ActivityTypeButton type="recreational" current={type} onChange={toggleActivityType}>Have Fun</ActivityTypeButton>
                   <ActivityTypeButton type="social" current={type} onChange={toggleActivityType}>Socialize</ActivityTypeButton>
                   <ActivityTypeButton type="diy" current={type} onChange={toggleActivityType}>Craft</ActivityTypeButton>
-                  <ActivityTypeButton type="charity" current={type} onChange={toggleActivityType}>Help</ActivityTypeButton>
+                  <ActivityTypeButton type="charity" current={type} onChange={toggleActivityType}>Help Others</ActivityTypeButton>
                   <ActivityTypeButton type="cooking" current={type} onChange={toggleActivityType}>Cook</ActivityTypeButton>
                   <ActivityTypeButton type="relaxation" current={type} onChange={toggleActivityType}>Relax</ActivityTypeButton>
                   <ActivityTypeButton type="music" current={type} onChange={toggleActivityType}>Listen / Play Music</ActivityTypeButton>
@@ -260,7 +294,7 @@ const ConfigWindow = function ({ isVisible, accessibility, participants, type, f
 
               </Box>
               <Box>
-                <label htmlFor="accessibility">Accessibility</label>
+                <label htmlFor="accessibility">How accessible is the activity?</label>
                 <Slider
                   id="accessibility"
                   getAriaLabel={() => 'Accessibility'}
@@ -291,15 +325,38 @@ const ConfigWindow = function ({ isVisible, accessibility, participants, type, f
                 />
               </Box>
               <Box>
-                <label htmlFor="participants">Participants</label>
+                <label htmlFor="participants">How many people?</label>
                 <Slider
                   id="participants"
                   getAriaLabel={() => 'Participants'}
                   value={participants}
-                  marks={[
+                  marks={matches ? [
+                    // Not enough space to show all labels without overlapping
+                    // so only display the first and last
                     {
                       value: 1,
-                      label: "1"
+                      label: "Just me"
+                    },
+                    {
+                      value: 2
+                    },
+                    {
+                      value: 3
+                    },
+                    {
+                      value: 4
+                    },
+                    {
+                      value: 5
+                    },
+                    {
+                      value: 6,
+                      label: "Doesn't matter"
+                    }
+                  ] : [
+                    {
+                      value: 1,
+                      label: "Just me"
                     },
                     {
                       value: 2,
@@ -319,7 +376,7 @@ const ConfigWindow = function ({ isVisible, accessibility, participants, type, f
                     },
                     {
                       value: 6,
-                      label: "Any"
+                      label: "Doesn't matter"
                     },
                   ]}
                   onChange={(e, newVal) => {
@@ -335,13 +392,13 @@ const ConfigWindow = function ({ isVisible, accessibility, participants, type, f
               </Box>
             </FormGroup>
           </ConfigWrapper>
-        </motion.div>
+        </motion.section>
       )}
     </AnimatePresence>
   )
 }
 
-const ConfigWrapper = styled.section`
+const ConfigWrapper = styled.main`
   min-height: 50px;
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 10px;
@@ -371,6 +428,14 @@ const ConfigWrapper = styled.section`
     margin-right: auto;
   }
   
+  .MuiBox-root.free-only-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+  }
+  
   .MuiSlider-markLabel {
     font-family: var(--font-family);
     color: var(--text-color);
@@ -382,6 +447,11 @@ const ConfigWrapper = styled.section`
   
   @media (max-width: 500px) {
     width: 300px;
+    
+    .MuiBox-root.free-only-box {
+      justify-content: center;
+      margin-top: 10px;
+    }
   }
 `;
 

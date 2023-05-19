@@ -1,10 +1,8 @@
-import { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
-import { createTheme } from '@mui/material/styles';
 import GlobalStyle from '../components/globalstyles'
 
-const theme = createTheme({});
-console.log(theme);
+// Use a blank theme, styling handled manually
+const theme = {};
 
 export default function App({ Component, pageProps }) {
   return (
